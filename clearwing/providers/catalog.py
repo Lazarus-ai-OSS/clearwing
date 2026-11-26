@@ -189,6 +189,31 @@ PROVIDER_PRESETS: tuple[ProviderPreset, ...] = (
         provider_adapter="openai",
     ),
     ProviderPreset(
+        key="martllm",
+        display_name="MartLLM",
+        description="OpenAI-compatible API, one key for many models. "
+        "Claude / GPT / Gemini / DeepSeek / Qwen / Kimi / GLM via "
+        "`anthropic/...` / `openai/...` / `deepseek/...` model names.",
+        docs_url="https://martllm.com/signup",
+        default_base_url="https://api.martllm.com/v1",
+        default_model="anthropic/claude-sonnet-4.6",
+        api_key_env_var="MARTLLM_API_KEY",
+        alt_models=(
+            "anthropic/claude-opus-4.7",
+            "openai/gpt-5.5",
+            "google/gemini-3.1-pro",
+            "deepseek/deepseek-v4-pro",
+            "deepseek/deepseek-v4-flash",
+            "anthropic/claude-haiku-4.5",
+        ),
+        tier_models={
+            "small": "anthropic/claude-haiku-4.5",
+            "mid": "anthropic/claude-sonnet-4.6",
+            "large": "anthropic/claude-opus-4.7",
+        },
+        provider_adapter="openai",
+    ),
+    ProviderPreset(
         key="ollama",
         display_name="Ollama (local, native adapter)",
         description="Local models, free, no API key. Uses the native "

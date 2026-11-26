@@ -86,6 +86,17 @@ class TestProviderCatalog:
         assert preset.provider_adapter == "openai"
         assert preset.is_openai_compat
 
+    def test_martllm_preset(self):
+        preset = preset_by_key("martllm")
+        assert preset is not None
+        assert preset.display_name == "MartLLM"
+        assert preset.default_base_url == "https://api.martllm.com/v1"
+        assert preset.api_key_env_var == "MARTLLM_API_KEY"
+        assert preset.provider_adapter == "openai"
+        assert preset.is_openai_compat
+        assert preset.model_for_tier("small") == "anthropic/claude-haiku-4.5"
+        assert preset.model_for_tier("large") == "anthropic/claude-opus-4.7"
+
     def test_openai_oauth_preset_is_not_openai_compat(self):
         preset = preset_by_key("openai-oauth")
         assert preset is not None
