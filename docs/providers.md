@@ -18,7 +18,7 @@ Backends covered below:
 - **OpenAI (Responses API)** — GPT-5.x / o-series via `/v1/responses`
   (`openai_resp` adapter). Required for GPT-5.x and o-series.
 - **OpenAI OAuth (ChatGPT)** — Plus/Pro login via Codex backend (`openai_codex`).
-- **OpenRouter, OrcaRouter, Together, Groq, Fireworks, DeepSeek, LM Studio, vLLM, custom** —
+- **OpenRouter, OrcaRouter, MartLLM, Together, Groq, Fireworks, DeepSeek, LM Studio, vLLM, custom** —
   anything that speaks `/v1/chat/completions` (`openai` adapter).
 - **MiniMax** — M2.7 / M2.5 via the Anthropic-compatible endpoint
   (`anthropic` adapter at `api.minimax.io/anthropic`).
@@ -258,6 +258,58 @@ This writes `~/.clearwing/config.yaml` with:
 provider:
   base_url: https://api.orcarouter.ai/v1
   api_key: ${ORCAROUTER_API_KEY}
+  model: anthropic/claude-sonnet-4.6
+  adapter: openai
+```
+
+## MartLLM
+
+[MartLLM](https://martllm.com) is an OpenAI-compatible API that serves
+models from many vendors behind one key. Model names follow the same
+`provider/model` convention as OpenRouter: `anthropic/claude-sonnet-4.6`,
+`openai/gpt-5.5`, `deepseek/deepseek-v4-pro`, `google/gemini-3.1-pro`.
+The full list, with each model's context length and whether it supports
+tool calling, is at `https://api.martllm.com/v1/models` (no key needed).
+Get a key at [martllm.com](https://martllm.com/signup) and point
+Clearwing at it with the `openai` adapter. It is a preset in the setup
+wizard, so you can also just run `clearwing setup --provider martllm`.
+
+### Per-command (flags)
+
+```bash
+clearwing sourcehunt /path/to/repo \
+    --base-url https://api.martllm.com/v1 \
+    --api-key "$MARTLLM_API_KEY" \
+    --model anthropic/claude-sonnet-4.6
+```
+
+### Per-session (env vars)
+
+```bash
+export CLEARWING_BASE_URL=https://api.martllm.com/v1
+export CLEARWING_API_KEY=$MARTLLM_API_KEY
+export CLEARWING_MODEL=anthropic/claude-sonnet-4.6
+
+# Every command picks this up automatically
+clearwing interactive
+clearwing sourcehunt /path/to/repo
+```
+
+### Persistent (config file)
+
+```bash
+clearwing config --set-provider \
+    base_url=https://api.martllm.com/v1 \
+    api_key='${MARTLLM_API_KEY}' \
+    model=anthropic/claude-sonnet-4.6
+```
+
+This writes `~/.clearwing/config.yaml` with:
+
+```yaml
+provider:
+  base_url: https://api.martllm.com/v1
+  api_key: ${MARTLLM_API_KEY}
   model: anthropic/claude-sonnet-4.6
   adapter: openai
 ```
